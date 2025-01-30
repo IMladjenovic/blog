@@ -13,11 +13,13 @@ summary: This blog is for anyone who is creating their own AI chatbot or multi-a
 author: imladjenovic
 ---
 
-Last December a small team at Scott Logic started a project to answer the question “How can we leverage Generative AI to identify and detect ESG [greenwashing](https://blog.scottlogic.com/2024/04/15/how-cxos-can-spot-technology-greenwashing.html)?”. This challenge was created by FinTech Scotland’s “[FRIL](https://www.fintechscotland.com/what-we-do/financial-regulation-innovation-lab/)” who selected our pitch: [InferESG](https://github.com/ScottLogic/InferESG) - a [multi-agent service](https://blog.scottlogic.com/2024/06/28/building-a-multi-agent-chatbot-without-langchain.html) for analysing sustainability reports, flagging potential greenwashing and answering ESG questions.
+Last October a small team at Scott Logic started a project to answer the question “How can we leverage Generative AI to identify and detect ESG [greenwashing](https://blog.scottlogic.com/2024/04/15/how-cxos-can-spot-technology-greenwashing.html)?”.
 
-> Greenwashing: When a company presents themselves as more sustainable than they really are (maliciously or otherwise...)
+This challenge was created by FinTech Scotland’s “[FRIL](https://www.fintechscotland.com/what-we-do/financial-regulation-innovation-lab/)” organisation who selected our pitch to build [InferESG](https://github.com/ScottLogic/InferESG) - a [multi-agent service](https://blog.scottlogic.com/2024/06/28/building-a-multi-agent-chatbot-without-langchain.html) for analysing sustainability reports, flagging potential greenwashing and answering ESG questions.
 
-> Multi-Agent Service: A service containing multiple agents where each agent is specialised to solve a specific task using an LLM such as ChatGPT.
+> **Greenwashing:** When a company presents themselves as more sustainable than they really are (maliciously or otherwise...)
+
+> **Multi-Agent Service:** A service containing multiple agents where each agent is specialised to solve a specific task using an LLM such as ChatGPT.
 
 With no prior AI experience, I’ve learned a lot in those short 3 months.
 
@@ -29,21 +31,21 @@ At the start of the project, we investigated which AI models we should use. At t
 
 It was imperative to find a balance between performance and cost, and reviewing various AI benchmarks, I found a consistent narrative that OpenAI’s gpt-4o-mini was only slightly less performant than the other LLMs (including their own gpt-4o) whilst being a whopping 10th of the cost.
 
-* https://epoch.ai/data/ai-benchmarking-dashboard shows accuracy scores for gpt-4o with 49%, gpt-4o-mini with 40%, mistral large with 34% and mistral large 2 with 49%. Most models from other providers are in this ballpark.
+* [https://epoch.ai/data/ai-benchmarking-dashboard](https://epoch.ai/data/ai-benchmarking-dashboard) shows accuracy scores for gpt-4o with 49%, gpt-4o-mini with 40%, mistral large with 34% and mistral large 2 with 49%. Most models from other providers are in this ballpark.
 
-* https://artificialanalysis.ai/models gives both gpt-4o and gpt-4o-mini a Quality score of 73 and mistral large 2 coming in at 74.
+* [https://artificialanalysis.ai/models](https://artificialanalysis.ai/models) gives both gpt-4o and gpt-4o-mini a Quality score of 73 and mistral large 2 coming in at 74.
 
 We made an early decision to favour the mini model based on the above findings. We made excellent progress and gpt-4o-mini was superb... until it wasn’t.
 
 Imagine, for a moment, you’re an instance of gpt-4o-mini idling in one of OpenAI’s servers; you’ve been prompted to act as the [supervisor of an agentic model](https://langchain-ai.github.io/langgraph/tutorials/multi_agent/agent_supervisor/), responsible for receiving user input and selecting an agent to handle it.
 
-You receive the following user question: “What are AstraZeneca’s sustainability goals?”
+You receive the following user question: _“What are AstraZeneca’s sustainability goals?”_
 
 Looking through your list of agents, you must select one of the following:
 
-* Web Agent: “This agent can search the internet to answer questions that require current information or answer general ESG / company related questions.”
+* Web Agent: _“This agent can search the internet to answer questions that require current information or answer general ESG / company related questions.”_
 
-* Materiality Agent: “This agent can answer questions about industry wide ESG Materiality standards and reporting practices. This agent cannot provide information about companies themselves, only industries and sectors as a whole.”
+* Materiality Agent: _“This agent can answer questions about industry wide ESG Materiality standards and reporting practices. This agent cannot provide information about companies themselves, only industries and sectors as a whole.”_
 
 Which agent would you choose?
 
@@ -95,7 +97,9 @@ This was concerning, and upon reflection, there are a few possible causes for th
 * Did we have too many examples, or not enough?
 * What if we upgraded from gpt-4o-mini to gpt-4o?
 
-When solving this issue, I had neither the time nor AI knowledge to investigate these areas, instead I grew an aversion to the advice of “use examples”. I stuck to instructing the agent carefully and concisely. The only examples I would give would be to demonstrate desired output format, and even then, these would be as generic as possible, e.g. `Output your answer in the following json format: { “question”: “Show me a chart about COMPANY_NAME GHG emissions” }`
+When solving this issue, I had neither the time nor AI knowledge to investigate these areas, instead I grew an aversion to the advice of “use examples”. I stuck to instructing the agent carefully and concisely. The only examples I would give would be to demonstrate desired output format, and even then, these would be as generic as possible, e.g.
+
+`Output your answer in the following json format: { “question”: “Show me a chart about COMPANY_NAME GHG emissions” }`
 
 This worked for me, but with more time I would like to have explored the bullet points above.
 
